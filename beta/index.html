@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stormzady's Place</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: linear-gradient(to bottom, #000033, #000000);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #00bbff;
+    overflow-x: hidden;
+  }
+  h1 {
+    margin-top: 50px;
+    font-size: 48px;
+    text-align: center;
+    color: #00bbff;
+    text-shadow: 0 0 5px #00bbff, 0 0 10px #00f;
+  }
+  .menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 40px;
+  }
+  .menu-item {
+    width: 220px;
+    height: 120px;
+    background-color: #001155;
+    border: 3px solid #0044aa;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00bbff, 0 0 20px #00f;
+    text-decoration: none;
+    color: #00bbff;
+    font-size: 22px;
+    text-align: center;
+    text-shadow: 0 0 5px #00bbff, 0 0 10px #00f;
+    transition: all 0.3s ease;
+  }
+  footer {
+    font-size: 20px;
+    margin: 50px 0;
+    text-align: center;
+  }
+  .nfooter {
+    color: #00bbff;
+    text-shadow: 0 0 5px #00bbff, 0 0 10px #ff99dd;
+  }
+  .mfooter {
+    color: #ff66cc;
+    text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff99dd;
+  }
+</style>
+</head>
+<body>
+
+<h1>Stormzady's Place</h1>
+<div class="menu" id="menu"></div>
+<footer class="nfooter">Designed and Maintained by Stormzady</footer>
+<footer class="mfooter">Misono Mika Forever &lt;3</footer>
+
+<script>
+  // Array of menu items
+  const items = ['Severn', 'Project 2', 'Project 3', 'Project 4', 'Project 5'];
+  const menu = document.getElementById('menu');
+
+  // Function to create menu items dynamically
+  items.forEach(text => {
+    const item = document.createElement('div');
+    item.classList.add('menu-item');
+    item.textContent = text;
+
+    // Add hover animation using JS
+    item.addEventListener('mouseenter', () => {
+      item.style.transform = 'scale(1.1)';
+      item.style.boxShadow = '0 0 30px #00bbff, 0 0 60px #00f';
+    });
+    item.addEventListener('mouseleave', () => {
+      item.style.transform = 'scale(1)';
+      item.style.boxShadow = '0 0 10px #00bbff, 0 0 20px #00f';
+    });
+
+    // Optional: Click animation
+    item.addEventListener('click', () => {
+      item.style.transform = 'scale(0.95)';
+      setTimeout(() => item.style.transform = 'scale(1.1)', 150);
+    });
+
+    // Glowing particles effect
+    const particleContainer = document.createElement('div');
+    particleContainer.style.position = 'absolute';
+    particleContainer.style.top = 0;
+    particleContainer.style.left = 0;
+    particleContainer.style.width = '100%';
+    particleContainer.style.height = '100%';
+    particleContainer.style.pointerEvents = 'none';
+    item.appendChild(particleContainer);
+
+    menu.appendChild(item);
+
+    // Animate small glowing dots around the item
+    setInterval(() => {
+      const dot = document.createElement('div');
+      const size = Math.random() * 6 + 2;
+      dot.style.width = dot.style.height = size + 'px';
+      dot.style.background = '#00bbff';
+      dot.style.position = 'absolute';
+      dot.style.borderRadius = '50%';
+      dot.style.left = Math.random() * 220 + 'px';
+      dot.style.top = Math.random() * 120 + 'px';
+      dot.style.opacity = 0.8;
+      dot.style.pointerEvents = 'none';
+      particleContainer.appendChild(dot);
+
+      setTimeout(() => {
+        dot.style.transition = 'all 1s ease';
+        dot.style.opacity = 0;
+        dot.style.transform = 'translateY(-20px)';
+      }, 50);
+
+      setTimeout(() => particleContainer.removeChild(dot), 1050);
+    }, 300);
+  });
+</script>
+
+</body>
+</html>
