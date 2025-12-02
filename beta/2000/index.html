@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stormzady's Place</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Press Start 2P', monospace;
+    background: #008080; /* classic teal desktop background */
+    overflow: hidden;
+    cursor: url('https://i.imgur.com/7aC3PLK.png'), auto; /* retro cursor */
+  }
+  canvas {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+  }
+  h1 {
+    margin-top: 40px;
+    font-size: 36px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px #000;
+  }
+  .menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 40px;
+    z-index:1;
+    position: relative;
+  }
+  .menu-item {
+    width: 220px;
+    height: 120px;
+    background-color: #c0c0c0;
+    border: 2px solid #fff;
+    box-shadow: inset -2px -2px #808080;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #000;
+    font-size: 14px;
+    text-align: center;
+    position: relative;
+    transition: all 0.1s ease;
+  }
+  .menu-item:active {
+    box-shadow: inset 2px 2px #808080;
+  }
+  .window {
+    width: 300px;
+    height: 200px;
+    background: #c0c0c0;
+    border: 2px solid #fff;
+    box-shadow: 4px 4px #808080;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    z-index: 100;
+  }
+  .window-header {
+    height: 24px;
+    background: linear-gradient(to bottom, #000080, #0000ff);
+    color: #fff;
+    font-size: 12px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: move;
+    user-select: none;
+  }
+  .window-header span {
+    font-weight: bold;
+  }
+  .close-btn {
+    width: 20px;
+    height: 18px;
+    background: #ff0000;
+    color: #fff;
+    text-align: center;
+    line-height: 18px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .window-content {
+    padding: 10px;
+    font-size: 12px;
+    color: #000;
+  }
+  .footer {
+    font-size: 12px;
+    margin: 40px 0;
+    text-align: center;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<h1>Stormzady's Place</h1>
+<div class="menu" id="menu"></div>
+<footer class="footer">Designed and Maintained by Stormzady | Misono Mika Forever &lt;3</footer>
+
+<script>
+  // --- Menu setup ---
+  const menuItems = ['Severn', 'Project 2', 'Project 3', 'Project 4', 'Project 5'];
+  const menu = document.getElementById('menu');
+
+  menuItems.forEach(text => {
+    const item = document.createElement('div');
+    item.classList.add('menu-item');
+    item.textContent = text;
+
+    item.addEventListener('click', () => openWindow(text));
+    menu.appendChild(item);
+  });
+
+  // --- Windows system ---
+  let highestZ = 100;
+
+  function openWindow(title){
+    const win = document.createElement('div');
+    win.classList.add('window');
+    win.style.top = (50 + Math.random()*200)+'px';
+    win.style.left = (50 + Math.random()*200)+'px';
+    win.style.zIndex = ++highestZ;
+
+    const header = document.createElement('div');
+    header.classList.add('window-header');
+    header.innerHTML = `<span>${title}</span>`;
+    const closeBtn = document.createElement('div');
+    closeBtn.classList.add('close-btn');
+    closeBtn.textContent = 'X';
+    closeBtn.onclick = ()=>document.body.removeChild(win);
+    header.appendChild(closeBtn);
+    win.appendChild(header);
+
+    const content = document.createElement('div');
+    content.classList.add('window-content');
+    content.innerHTML = `Welcome to ${title}!<br>This is a retro 2000s style window.`;
+    win.appendChild(content);
+
+    document.body.appendChild(win);
+
+    // Make draggable
+    let isDragging = false, offsetX=0, offsetY=0;
+    header.addEventListener('mousedown', e => {
+      isDragging = true;
+      offsetX = e.clientX - win.offsetLeft;
+      offsetY = e.clientY - win.offsetTop;
+      win.style.zIndex = ++highestZ;
+    });
+    window.addEventListener('mouseup', ()=> isDragging=false);
+    window.addEventListener('mousemove', e=>{
+      if(isDragging){
+        win.style.left = (e.clientX - offsetX) + 'px';
+        win.style.top = (e.clientY - offsetY) + 'px';
+      }
+    });
+  }
+
+  // --- Background starfield ---
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const stars = [];
+  for(let i=0;i<200;i++){
+    stars.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      size: Math.random()*2+1,
+      speed: Math.random()*0.5+0.2
+    });
+  }
+
+  function drawStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#00ffff';
+    stars.forEach(s => {
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+      ctx.fill();
+      s.y += s.speed;
+      if(s.y>canvas.height) s.y = 0;
+    });
+  }
+
+  // Neon cursor trail
+  const trail = [];
+  let mouse = {x: canvas.width/2, y: canvas.height/2};
+  document.addEventListener('mousemove', e=>{
+    mouse.x=e.clientX; mouse.y=e.clientY;
+    trail.push({x:mouse.x,y:mouse.y,alpha:1});
+    if(trail.length>50) trail.shift();
+  });
+  function drawTrail(){
+    for(let i=0;i<trail.length;i++){
+      const t=trail[i];
+      ctx.beginPath();
+      ctx.fillStyle=`rgba(0,255,255,${t.alpha})`;
+      ctx.arc(t.x,t.y,5,0,Math.PI*2);
+      ctx.fill();
+      t.alpha -= 0.02;
+    }
+  }
+
+  function animate(){
+    drawStars();
+    drawTrail();
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  window.addEventListener('resize', ()=>{
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+</body>
+</html>
