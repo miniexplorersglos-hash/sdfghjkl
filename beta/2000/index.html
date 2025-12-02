@@ -8,17 +8,9 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family: 'Press Start 2P', monospace;
-    background: #008080; /* classic teal desktop background */
+    background: #008080; /* classic teal desktop */
     overflow: hidden;
     cursor: url('https://i.imgur.com/7aC3PLK.png'), auto; /* retro cursor */
-  }
-  canvas {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:-1;
   }
   h1 {
     margin-top: 40px;
@@ -56,18 +48,18 @@
     box-shadow: inset 2px 2px #808080;
   }
   .window {
-    width: 300px;
-    height: 200px;
+    width: 600px;
+    height: 400px;
     background: #c0c0c0;
     border: 2px solid #fff;
-    box-shadow: 4px 4px #808080;
+    box-shadow: 6px 6px #808080;
     position: absolute;
-    top: 100px;
-    left: 100px;
+    top: 50px;
+    left: 50px;
     z-index: 100;
   }
   .window-header {
-    height: 24px;
+    height: 28px;
     background: linear-gradient(to bottom, #000080, #0000ff);
     color: #fff;
     font-size: 12px;
@@ -92,8 +84,8 @@
     font-weight: bold;
   }
   .window-content {
-    padding: 10px;
-    font-size: 12px;
+    padding: 15px;
+    font-size: 14px;
     color: #000;
   }
   .footer {
@@ -101,6 +93,14 @@
     margin: 40px 0;
     text-align: center;
     color: #fff;
+  }
+  canvas {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
   }
 </style>
 </head>
@@ -112,28 +112,31 @@
 <div class="menu" id="menu"></div>
 <footer class="footer">Designed and Maintained by Stormzady | Misono Mika Forever &lt;3</footer>
 
+<!-- Sounds -->
+<audio id="openSound" src="https://freesound.org/data/previews/341/341695_6240358-lq.mp3"></audio>
+<audio id="closeSound" src="https://freesound.org/data/previews/341/341691_6240358-lq.mp3"></audio>
+
 <script>
-  // --- Menu setup ---
   const menuItems = ['Severn', 'Project 2', 'Project 3', 'Project 4', 'Project 5'];
   const menu = document.getElementById('menu');
+  const openSound = document.getElementById('openSound');
+  const closeSound = document.getElementById('closeSound');
+
+  let highestZ = 100;
 
   menuItems.forEach(text => {
     const item = document.createElement('div');
     item.classList.add('menu-item');
     item.textContent = text;
-
     item.addEventListener('click', () => openWindow(text));
     menu.appendChild(item);
   });
 
-  // --- Windows system ---
-  let highestZ = 100;
-
   function openWindow(title){
     const win = document.createElement('div');
     win.classList.add('window');
-    win.style.top = (50 + Math.random()*200)+'px';
-    win.style.left = (50 + Math.random()*200)+'px';
+    win.style.top = (50 + Math.random()*100)+'px';
+    win.style.left = (50 + Math.random()*100)+'px';
     win.style.zIndex = ++highestZ;
 
     const header = document.createElement('div');
@@ -142,21 +145,29 @@
     const closeBtn = document.createElement('div');
     closeBtn.classList.add('close-btn');
     closeBtn.textContent = 'X';
-    closeBtn.onclick = ()=>document.body.removeChild(win);
+    closeBtn.onclick = ()=>{
+      closeSound.currentTime = 0;
+      closeSound.play();
+      document.body.removeChild(win);
+    };
     header.appendChild(closeBtn);
     win.appendChild(header);
 
     const content = document.createElement('div');
     content.classList.add('window-content');
-    content.innerHTML = `Welcome to ${title}!<br>This is a retro 2000s style window.`;
+    content.innerHTML = `<p>Welcome to ${title}!</p><p>This is a retro 2000s style window.</p>`;
     win.appendChild(content);
 
     document.body.appendChild(win);
 
-    // Make draggable
-    let isDragging = false, offsetX=0, offsetY=0;
-    header.addEventListener('mousedown', e => {
-      isDragging = true;
+    // Play open sound
+    openSound.currentTime = 0;
+    openSound.play();
+
+    // Dragging
+    let isDragging=false, offsetX=0, offsetY=0;
+    header.addEventListener('mousedown', e=>{
+      isDragging=true;
       offsetX = e.clientX - win.offsetLeft;
       offsetY = e.clientY - win.offsetTop;
       win.style.zIndex = ++highestZ;
@@ -164,8 +175,8 @@
     window.addEventListener('mouseup', ()=> isDragging=false);
     window.addEventListener('mousemove', e=>{
       if(isDragging){
-        win.style.left = (e.clientX - offsetX) + 'px';
-        win.style.top = (e.clientY - offsetY) + 'px';
+        win.style.left = (e.clientX-offsetX)+'px';
+        win.style.top = (e.clientY-offsetY)+'px';
       }
     });
   }
@@ -176,7 +187,7 @@
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const stars = [];
+  const stars=[];
   for(let i=0;i<200;i++){
     stars.push({
       x: Math.random()*canvas.width,
@@ -188,45 +199,21 @@
 
   function drawStars(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = '#00ffff';
-    stars.forEach(s => {
+    ctx.fillStyle='#00ffff';
+    stars.forEach(s=>{
       ctx.beginPath();
       ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
       ctx.fill();
-      s.y += s.speed;
-      if(s.y>canvas.height) s.y = 0;
+      s.y+=s.speed;
+      if(s.y>canvas.height) s.y=0;
     });
+    requestAnimationFrame(drawStars);
   }
-
-  // Neon cursor trail
-  const trail = [];
-  let mouse = {x: canvas.width/2, y: canvas.height/2};
-  document.addEventListener('mousemove', e=>{
-    mouse.x=e.clientX; mouse.y=e.clientY;
-    trail.push({x:mouse.x,y:mouse.y,alpha:1});
-    if(trail.length>50) trail.shift();
-  });
-  function drawTrail(){
-    for(let i=0;i<trail.length;i++){
-      const t=trail[i];
-      ctx.beginPath();
-      ctx.fillStyle=`rgba(0,255,255,${t.alpha})`;
-      ctx.arc(t.x,t.y,5,0,Math.PI*2);
-      ctx.fill();
-      t.alpha -= 0.02;
-    }
-  }
-
-  function animate(){
-    drawStars();
-    drawTrail();
-    requestAnimationFrame(animate);
-  }
-  animate();
+  drawStars();
 
   window.addEventListener('resize', ()=>{
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
   });
 </script>
 </body>
