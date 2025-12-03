@@ -4,33 +4,29 @@
 <meta charset="UTF-8">
 <title>Stormzady's Place</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================================
-   GLOBAL
-============================================================ */
+/* ========== GLOBAL ========== */
 body {
   margin: 0;
-  background: #000;
+  background: linear-gradient(135deg, #120033, #330066, #000000);
   font-family: "Press Start 2P", cursive;
   color: #e0e0ff;
   text-shadow: 0 0 4px #00ffff;
   overflow-x: hidden;
-  cursor: none;
 }
 
-a {
-   cursor: none;
-   text-transform: none;
-   
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #00ffff;
 }
 
-/* SCROLLBAR */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: #00ffff; }
-
-/* CUSTOM CURSOR */
+/* ========== CURSOR ========== */
 #cursor {
   width: 14px;
   height: 14px;
@@ -41,55 +37,15 @@ a {
   mix-blend-mode: difference;
   transform: translate(-50%, -50%);
   transition: transform 0.1s;
-  z-index: 10000;
+  z-index: 999;
 }
 
-/* ============================================================
-   PARTICLE BACKGROUND
-============================================================ */
-#particles {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: -1;
-  background: transparent;
-}
-
-/* ============================================================
-   BOOT LOADING SCREEN
-============================================================ */
-#loader {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: black;
-  color: cyan;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  font-size: 12px;
-}
-
-#loader p {
-  animation: flicker 1.2s infinite alternate;
-}
-
-@keyframes flicker {
-  0% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
+/* ========== NAV ========== */
 nav {
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 50;
+  z-index: 20;
 }
 
 nav button {
@@ -101,22 +57,13 @@ nav button {
   color: #00ffff;
   cursor: pointer;
   font-size: 10px;
-  transition: 0.2s;
 }
-
 nav button:hover {
   background: #00ffff;
   color: #111;
 }
 
-/* THEME TOGGLE */
-#themeToggle {
-  margin-left: 12px;
-}
-
-/* ============================================================
-   HERO HEADER + 3D CUBE
-============================================================ */
+/* ========== HEADER ========== */
 header {
   height: 100vh;
   display: flex;
@@ -130,67 +77,18 @@ header h1 {
   text-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
 }
 
-#cube {
-  width: 140px;
-  height: 140px;
-  margin: 40px auto 0;
-  transform-style: preserve-3d;
-  animation: spin 6s linear infinite;
+header p {
+  margin-top: 10px;
+  opacity: 0.8;
 }
 
-.cube-face {
-  position: absolute;
-  width: 140px;
-  height: 140px;
-  background: rgba(0,255,255,0.2);
-  border: 2px solid cyan;
-  backdrop-filter: blur(4px);
-}
-
-@keyframes spin {
-  from { transform: rotateX(0deg) rotateY(0deg); }
-  to { transform: rotateX(360deg) rotateY(360deg); }
-}
-
-/* ============================================================
-   SECTIONS
-============================================================ */
+/* ========== SECTIONS ========== */
 .section {
   padding: 80px 20px;
   max-width: 900px;
   margin: auto;
 }
 
-/* ABOUT ME — GLITCH TEXT */
-.glitch {
-  font-size: 18px;
-  position: relative;
-  color: #00ffff;
-}
-
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  text-shadow: -2px 0 magenta;
-  top: 0;
-  overflow: hidden;
-  animation: glitch 1.5s infinite;
-}
-
-.glitch::after {
-  text-shadow: 2px 0 cyan;
-  animation-duration: 2s;
-}
-
-@keyframes glitch {
-  0% { clip-path: inset(10% 0 90% 0); }
-  50% { clip-path: inset(40% 0 20% 0); }
-  100% { clip-path: inset(15% 0 75% 0); }
-}
-
-/* PROJECT CARDS */
 .card {
   background: rgba(0, 0, 0, 0.4);
   padding: 25px;
@@ -198,137 +96,147 @@ header h1 {
   border: 2px solid #00ffff;
   margin-bottom: 30px;
   box-shadow: 0 0 15px #00ffff80;
-  transition: 0.3s;
-  transform: perspective(600px) rotateX(0) rotateY(0);
 }
 
-.card:hover {
-  transform: perspective(600px) rotateX(6deg) rotateY(-6deg);
-  box-shadow: 0 0 25px #00ffff;
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
-/* ============================================================
-   TERMINAL CONSOLE
-============================================================ */
-#terminal {
-  background: rgba(0,0,0,0.7);
-  border: 2px solid cyan;
-  padding: 20px;
-  color: lime;
+.card p {
   font-size: 12px;
-  height: 200px;
-  overflow-y: auto;
+  line-height: 1.6;
 }
 
-#terminalInput {
-  width: 100%;
-  background: black;
-  border: 2px solid cyan;
-  color: lime;
-  padding: 6px;
-  margin-top: 10px;
-  font-family: inherit;
+.card a {
+  color: #00ffff;
+  text-decoration: underline;
 }
 
-/* ============================================================
-   FOOTER
-============================================================ */
+/* ========== FOOTER ========== */
 footer {
   text-align: center;
   padding: 40px;
   opacity: 0.6;
   font-size: 10px;
 }
+
+/* ========== THINGS TO DO SECTION ========== */
+#thingsToDo {
+  padding: 80px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+#paintCanvas {
+  border: 2px solid #00ffff;
+  background: #111;
+  cursor: crosshair;
+  display: block;
+  margin: 20px auto;
+}
+
+.tool-button {
+  background: #111;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  font-family: inherit;
+  padding: 5px 8px;
+  margin-right: 6px;
+  cursor: pointer;
+  font-size: 10px;
+}
+.tool-button:hover {
+  background: #00ffff;
+  color: #111;
+}
 </style>
 </head>
-
 <body>
 
-<!-- PARTICLES -->
-<canvas id="particles"></canvas>
-
-<!-- CUSTOM CURSOR -->
 <div id="cursor"></div>
 
-<!-- BOOT LOADING SCREEN -->
-<div id="loader">
-  <p>Loading Stormzady's Place...</p>
-  <p>Why is this even here...?</p>
-  <p>Oh well..</p>
-  <p>Welcome!</p>
-</div>
-
-<!-- NAV -->
 <nav>
   <button onclick="go('home')">Home</button>
-  <button onclick="go('about')">About</button>
   <button onclick="go('projects')">Projects</button>
+  <button onclick="go('thingsToDo')">Things To Do</button>
   <button onclick="go('contact')">Contact</button>
-  <button id="themeToggle">Theme</button>
 </nav>
 
-<!-- HEADER -->
 <header id="home">
   <h1>Stormzady's Place</h1>
   <p>Bots · Tools · Experiments</p>
-
-  <!-- 3D CUBE -->
-  <div id="cube">
-    <div class="cube-face" style="transform: rotateY(0deg) translateZ(70px);"></div>
-    <div class="cube-face" style="transform: rotateY(90deg) translateZ(70px);"></div>
-    <div class="cube-face" style="transform: rotateY(180deg) translateZ(70px);"></div>
-    <div class="cube-face" style="transform: rotateY(-90deg) translateZ(70px);"></div>
-    <div class="cube-face" style="transform: rotateX(90deg) translateZ(70px);"></div>
-    <div class="cube-face" style="transform: rotateX(-90deg) translateZ(70px);"></div>
-  </div>
 </header>
 
-<!-- ABOUT -->
-<div id="about" class="section">
-  <h2 style="text-align:center;">About Me</h2>
-  <p class="glitch" data-text="Hi! I'm Stormzady! I make random stuff... Occasionally...">
-    Hi! I'm Stormzady! I make random stuff... Occasionally...
-    Anyway, Scroll down.. Take a look..
-    Bai!
-  </p>
-</div>
-
-<!-- PROJECTS -->
 <div id="projects" class="section">
+
   <h2 style="text-align:center; margin-bottom:40px;">My Projects</h2>
 
   <div class="card">
     <h2>Severn — Discord Bot</h2>
-    <p>A fun based Discord bot with Krystal integration.</p>
-    <p><a href="#">Add to Discord</a></p>
+    <p>
+      A fun based Discord bot, focusing on Fun commands and has integration with another bot named Krystal.
+    </p>
+    <p><a href="#">Add to a Discord Server</a></p>
   </div>
 
   <div class="card">
-    <h2>Lifeboat — Browser in Shortcuts</h2>
-    <p>A micro-browser built entirely inside Apple Shortcuts.</p>
+    <h2>Lifeboat — Browser in Apple Shortcuts</h2>
+    <p>
+      A fully functional “micro-browser” created entirely inside Apple Shortcuts.
+    </p>
     <p><a href="#">Add Lifeboat</a></p>
   </div>
 
   <div class="card">
     <h2>More Projects Coming Soon</h2>
-    <p>I'm always building more since I have too much time ¯_(ツ)_/¯</p>
+    <p>
+      I'm always working on a lot more, but you won't see them till I think they're ready.
+    </p>
   </div>
 </div>
 
-<!-- TERMINAL -->
-<div class="section">
-  <h2 style="text-align:center;">Terminal</h2>
-  <div id="terminal"></div>
-  <input id="terminalInput" placeholder="Type a command (help)">
+<div id="thingsToDo" class="section">
+
+  <h2 style="text-align:center; margin-bottom:40px;">Things To Do</h2>
+
+  <div class="card">
+    <h2>Paint App</h2>
+    <p>Draw freely with your mouse!</p>
+    <div style="text-align:center;">
+      <button class="tool-button" onclick="clearCanvas()">Clear</button>
+      <button class="tool-button" onclick="setColor('cyan')">Cyan</button>
+      <button class="tool-button" onclick="setColor('magenta')">Magenta</button>
+      <button class="tool-button" onclick="setColor('yellow')">Yellow</button>
+      <button class="tool-button" onclick="setColor('white')">White</button>
+    </div>
+    <canvas id="paintCanvas" width="800" height="400"></canvas>
+  </div>
+
+  <div class="card">
+    <h2>Number Guesser</h2>
+    <p>Try to guess the number between 1 and 100!</p>
+    <input type="number" id="guessInput" placeholder="Enter your guess" style="font-family:inherit;">
+    <button class="tool-button" onclick="checkGuess()">Guess</button>
+    <p id="guessResult"></p>
+  </div>
+
+  <div class="card">
+    <h2>Random Quote Generator</h2>
+    <p>Click the button to get a random motivational quote.</p>
+    <button class="tool-button" onclick="generateQuote()">Generate Quote</button>
+    <p id="quoteDisplay"></p>
+  </div>
+
 </div>
 
-<!-- CONTACT -->
 <div id="contact" class="section">
-  <h2 style="text-align:center;">Get in Contact!</h2>
+  <h2 style="text-align:center; margin-bottom:40px;">Get in Contact!</h2>
   <div class="card">
+    <p>Want to reach out, collaborate, or check out my work?</p>
     <p>
       <a href="#">Discord</a> • 
-      <a href="#">GitHub</a> • 
+      <a href="#">GitHub</a>  •
       <a href="#">GitHub (alt)</a>
     </p>
   </div>
@@ -338,103 +246,74 @@ footer {
   © 2025 Stormzady — Misona Mika forever <3
 </footer>
 
-<!-- ============================================================
-   JAVASCRIPT MAGIC
-============================================================ -->
 <script>
-/* SMOOTH SCROLL */
+/* Smooth scroll */
 function go(id) {
   document.getElementById(id).scrollIntoView({behavior: "smooth"});
 }
 
-/* CURSOR FOLLOW */
+/* Cursor glow */
 const cursor = document.getElementById("cursor");
-
-let mouseX = 0, mouseY = 0;
-let cursorX = 0, cursorY = 0;
-const speed = 0.15; // lower = slower/lazier follow
-
 document.addEventListener("mousemove", e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+  cursor.style.left = e.pageX + "px";
+  cursor.style.top = e.pageY + "px";
 });
+document.addEventListener("mousedown", () => cursor.style.transform = "scale(0.6)");
+document.addEventListener("mouseup", () => cursor.style.transform = "scale(1)");
 
-function animateCursor() {
-  // Move cursor a fraction toward the mouse each frame
-  cursorX += (mouseX - cursorX) * speed;
-  cursorY += (mouseY - cursorY) * speed;
+/* ========== PAINT APP ========== */
+const canvas = document.getElementById('paintCanvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+let color = 'cyan';
 
-  cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-  requestAnimationFrame(animateCursor);
+canvas.addEventListener('mousedown', () => drawing = true);
+canvas.addEventListener('mouseup', () => drawing = false);
+canvas.addEventListener('mousemove', draw);
+
+function draw(e) {
+  if (!drawing) return;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(e.offsetX, e.offsetY, 4, 0, Math.PI * 2);
+  ctx.fill();
 }
 
-animateCursor();
-
-/* LOADER */
-setTimeout(() => {
-  document.getElementById("loader").style.display = "none";
-}, 2500);
-
-/* PARTICLES */
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
-let particles = [];
-for (let i = 0; i < 80; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    s: Math.random() * 2 + 1,
-    v: Math.random() * 0.5 + 0.2
-  });
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function drawParticles() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p => {
-    ctx.fillStyle = "cyan";
-    ctx.fillRect(p.x,p.y,p.s,p.s);
-    p.y += p.v;
-    if (p.y > canvas.height) p.y = 0;
-  });
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
-
-/* TERMINAL */
-const terminal = document.getElementById("terminal");
-const terminalInput = document.getElementById("terminalInput");
-
-function termPrint(text) {
-  terminal.innerHTML += text + "<br>";
-  terminal.scrollTop = terminal.scrollHeight;
+function setColor(c) {
+  color = c;
 }
 
-terminalInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    const cmd = terminalInput.value.toLowerCase();
-    terminalInput.value = "";
-    termPrint("> " + cmd);
-
-    if (cmd === "help") termPrint("Commands: help, hi, about, clear, love");
-    else if (cmd === "hi") termPrint("Hello chaotic traveler.");
-    else if (cmd === "about") termPrint("Stormzady: maker of bots, chaos, and neon dreams.");
-    else if (cmd === "love") termPrint("<3 <3 <3");
-    else if (cmd === "clear") terminal.innerHTML = "";
-    else termPrint("Unknown command.");
+/* ========== NUMBER GUESSER ========== */
+const numberToGuess = Math.floor(Math.random() * 100) + 1;
+function checkGuess() {
+  const guess = parseInt(document.getElementById('guessInput').value);
+  const result = document.getElementById('guessResult');
+  if (guess === numberToGuess) {
+    result.textContent = "Correct! You guessed it!";
+  } else if (guess < numberToGuess) {
+    result.textContent = "Too low!";
+  } else {
+    result.textContent = "Too high!";
   }
-});
+}
 
-/* THEME TOGGLE */
-let theme = 0;
-document.getElementById("themeToggle").onclick = () => {
-  theme = (theme + 1) % 3;
-  if (theme === 0) document.body.style.background = "linear-gradient(135deg,#120033,#330066,#000)";
-  if (theme === 1) document.body.style.background = "black";
-  if (theme === 2) document.body.style.background = "linear-gradient(135deg,#ff00ff,#00ffff,#000)";
-};
+/* ========== RANDOM QUOTES ========== */
+const quotes = [
+  "Keep going, you’re doing great!",
+  "Every expert was once a beginner.",
+  "Dream big, act bigger.",
+  "Mistakes are proof that you’re trying.",
+  "Stay curious and explore!"
+];
+
+function generateQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  document.getElementById('quoteDisplay').textContent = quotes[randomIndex];
+}
 </script>
 
 </body>
