@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Stormzady's Place</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <!-- FONT -->
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
 <style>
 /* ========== GLOBAL ========== */
@@ -20,7 +20,7 @@ body {
   cursor: none; /* hide default pointer */
 }
 
-/* ========== SCROLLBAR ========== */
+/* SCROLLBAR */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -28,7 +28,7 @@ body {
   background: #00ffff;
 }
 
-/* ========== CUSTOM CURSOR ========== */
+/* CUSTOM CURSOR */
 #cursor {
   width: 14px;
   height: 14px;
@@ -42,7 +42,7 @@ body {
   z-index: 9999;
 }
 
-/* ========== NAV ========== */
+/* NAV */
 nav {
   position: fixed;
   top: 20px;
@@ -65,14 +65,16 @@ nav button:hover {
   color: #111;
 }
 
-/* ========== HEADER ========== */
+/* HEADER */
 header {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   text-align: center;
   position: relative;
+  perspective: 800px; /* for 3D effect on cube */
 }
 
 header h1 {
@@ -84,25 +86,46 @@ header h1 {
 header p {
   margin-top: 10px;
   opacity: 0.8;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 }
 
-/* ========== SPINNING CUBE BELOW TEXT ========== */
-.cube {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(45deg, #00ffff, #ff00ff);
-  margin: 0 auto;
+/* 3D CUBE CONTAINER */
+.cube-container {
+  width: 100px;
+  height: 100px;
+  position: relative;
   transform-style: preserve-3d;
-  animation: spin 5s linear infinite;
+  animation: spin 6s linear infinite;
+  cursor: none;
 }
 
+/* 3D CUBE FACES */
+.cube-face {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  box-shadow: 0 0 15px #00ffff88;
+  opacity: 0.9;
+}
+
+/* Positioning each face */
+.cube-face.front  { transform: translateZ(50px); }
+.cube-face.back   { transform: rotateY(180deg) translateZ(50px); }
+.cube-face.right  { transform: rotateY(90deg) translateZ(50px); }
+.cube-face.left   { transform: rotateY(-90deg) translateZ(50px); }
+.cube-face.top    { transform: rotateX(90deg) translateZ(50px); }
+.cube-face.bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+/* Spin animation */
 @keyframes spin {
   0% { transform: rotateX(0deg) rotateY(0deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 
-/* ========== SECTIONS ========== */
+/* SECTIONS */
 .section {
   padding: 80px 20px;
   max-width: 900px;
@@ -130,14 +153,14 @@ header p {
 
 .card a {
   color: #00ffff;
-  text-decoration: none; /* only underline on hover */
+  text-decoration: none;
 }
 
 .card a:hover {
   text-decoration: underline;
 }
 
-/* ========== FOOTER ========== */
+/* FOOTER */
 footer {
   text-align: center;
   padding: 40px;
@@ -145,7 +168,7 @@ footer {
   font-size: 10px;
 }
 
-/* ========== BOOT ANIMATION ========== */
+/* BOOT ANIMATION */
 #boot {
   position: fixed;
   top: 0;
@@ -197,7 +220,15 @@ footer {
 <header id="home">
   <h1>Stormzady's Place</h1>
   <p>Bots · Tools · Experiments</p>
-  <div class="cube"></div>
+
+  <div class="cube-container" aria-label="Spinning 3D cube" role="img" tabindex="0">
+    <div class="cube-face front"></div>
+    <div class="cube-face back"></div>
+    <div class="cube-face right"></div>
+    <div class="cube-face left"></div>
+    <div class="cube-face top"></div>
+    <div class="cube-face bottom"></div>
+  </div>
 </header>
 
 <div id="projects" class="section">
@@ -226,8 +257,8 @@ footer {
   <div class="card">
     <p>Want to reach out, collaborate, or check out my work?</p>
     <p>
-      <a href="#">Discord</a> • 
-      <a href="#">GitHub</a>  •
+      <a href="#">Discord</a> •
+      <a href="#">GitHub</a> •
       <a href="#">GitHub (alt)</a>
     </p>
   </div>
@@ -240,7 +271,7 @@ footer {
 <script>
 /* Smooth scroll */
 function go(id) {
-  document.getElementById(id).scrollIntoView({behavior: "smooth"});
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
 }
 
 /* Cursor movement */
@@ -249,13 +280,13 @@ document.addEventListener("mousemove", e => {
   cursor.style.left = e.pageX + "px";
   cursor.style.top = e.pageY + "px";
 });
-document.addEventListener("mousedown", () => cursor.style.transform = "scale(0.6)");
-document.addEventListener("mouseup", () => cursor.style.transform = "scale(1)");
+document.addEventListener("mousedown", () => (cursor.style.transform = "scale(0.6)"));
+document.addEventListener("mouseup", () => (cursor.style.transform = "scale(1)"));
 
 // Hover effect on links and buttons
 document.querySelectorAll("a, button").forEach(el => {
-  el.addEventListener("mouseenter", () => cursor.style.background = "#00ffff33");
-  el.addEventListener("mouseleave", () => cursor.style.background = "transparent");
+  el.addEventListener("mouseenter", () => (cursor.style.background = "#00ffff33"));
+  el.addEventListener("mouseleave", () => (cursor.style.background = "transparent"));
 });
 
 // Boot animation timeout
@@ -268,3 +299,4 @@ window.addEventListener("load", () => {
 
 </body>
 </html>
+
