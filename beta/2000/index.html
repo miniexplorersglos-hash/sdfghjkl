@@ -2,219 +2,195 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Stormzady's Place</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<title>Stormzady — Y2K Zone</title>
+
+<!-- Pixel Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: 'Press Start 2P', monospace;
-    background: #008080; /* classic teal desktop */
-    overflow: hidden;
-    cursor: url('https://i.imgur.com/7aC3PLK.png'), auto; /* retro cursor */
-  }
-  h1 {
-    margin-top: 40px;
-    font-size: 36px;
-    text-align: center;
-    color: #fff;
-    text-shadow: 2px 2px #000;
-  }
-  .menu {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 50px;
-    gap: 40px;
-    z-index:1;
-    position: relative;
-  }
-  .menu-item {
-    width: 220px;
-    height: 120px;
-    background-color: #c0c0c0;
-    border: 2px solid #fff;
-    box-shadow: inset -2px -2px #808080;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    color: #000;
-    font-size: 14px;
-    text-align: center;
-    position: relative;
-    transition: all 0.1s ease;
-  }
-  .menu-item:active {
-    box-shadow: inset 2px 2px #808080;
-  }
-  .window {
-    width: 600px;
-    height: 400px;
-    background: #c0c0c0;
-    border: 2px solid #fff;
-    box-shadow: 6px 6px #808080;
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    z-index: 100;
-  }
-  .window-header {
-    height: 28px;
-    background: linear-gradient(to bottom, #000080, #0000ff);
-    color: #fff;
-    font-size: 12px;
-    padding: 0 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: move;
-    user-select: none;
-  }
-  .window-header span {
-    font-weight: bold;
-  }
-  .close-btn {
-    width: 20px;
-    height: 18px;
-    background: #ff0000;
-    color: #fff;
-    text-align: center;
-    line-height: 18px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .window-content {
-    padding: 15px;
-    font-size: 14px;
-    color: #000;
-  }
-  .footer {
-    font-size: 12px;
-    margin: 40px 0;
-    text-align: center;
-    color: #fff;
-  }
-  canvas {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:-1;
-  }
+/* ======= Y2K CSS ======= */
+
+body {
+  margin: 0;
+  font-family: "Press Start 2P", cursive;
+  background: radial-gradient(circle at top, #ffccff, #444);
+  color: #ffffff;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom neon cursor */
+.cursor {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition: transform 0.1s ease-out;
+}
+
+header {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.glow {
+  font-size: 50px;
+  color: #fff;
+  text-shadow: 0 0 10px #00eaff, 0 0 25px #00eaff, 0 0 50px #00eaff;
+}
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+nav {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.nav-btn {
+  font-family: inherit;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  background: linear-gradient(135deg, #cc00ff, #00ccff);
+  color: white;
+  box-shadow: 0 0 10px #fff;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  transform: scale(1.1);
+}
+
+.panel {
+  padding: 80px 20px;
+  margin: 50px auto;
+  background: rgba(0, 0, 0, 0.35);
+  width: 80%;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #ff00ff, 0 0 40px #00ffff;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 8px cyan;
+}
+
+.highlight {
+  color: #00ffff;
+  text-shadow: 0 0 6px #00ffff;
+}
+
+/* Gallery fake cards */
+.img-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.img-card {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, #ff00ff, #0066ff);
+  border-radius: 10px;
+  box-shadow: 0 0 20px #fff;
+}
+
+.y2k-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #00ffff, #9933ff);
+  text-decoration: none;
+  color: black;
+  box-shadow: 0 0 20px cyan;
+}
+
+.y2k-btn:hover {
+  filter: brightness(1.2);
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.7;
+  font-size: 10px;
+}
 </style>
 </head>
+
 <body>
 
-<canvas id="bgCanvas"></canvas>
+<div class="cursor"></div>
 
-<h1>Stormzady's Place</h1>
-<div class="menu" id="menu"></div>
-<footer class="footer">Designed and Maintained by Stormzady | Misono Mika Forever &lt;3</footer>
+<header>
+  <h1 class="glow">STORMZADY</h1>
+  <p class="subtitle">Welcome to the Y2K Dimension</p>
+</header>
 
-<!-- Sounds -->
-<audio id="openSound" src="https://freesound.org/data/previews/341/341695_6240358-lq.mp3"></audio>
-<audio id="closeSound" src="https://freesound.org/data/previews/341/341691_6240358-lq.mp3"></audio>
+<nav>
+  <button class="nav-btn" onclick="scrollToSection('about')">About</button>
+  <button class="nav-btn" onclick="scrollToSection('gallery')">Gallery</button>
+  <button class="nav-btn" onclick="scrollToSection('contact')">Contact</button>
+</nav>
 
+<section id="about" class="panel">
+  <h2>About Me</h2>
+  <p>Hey! I'm <span class="highlight">Stormzady</span>. I love chaotic aesthetics, chrome textures, retro cyberspace 
+     vibes, and anything that looks like it came from a 2003 desktop wallpaper folder.</p>
+</section>
+
+<section id="gallery" class="panel">
+  <h2>Gallery</h2>
+  <div class="img-grid">
+    <div class="img-card"></div>
+    <div class="img-card"></div>
+    <div class="img-card"></div>
+  </div>
+</section>
+
+<section id="contact" class="panel">
+  <h2>Contact</h2>
+  <p>Hit me up if you like the vibes ✨</p>
+  <a href="#" class="y2k-btn">Email Me</a>
+</section>
+
+<footer>
+  <p>© 2025 Stormzady — Powered by Y2K Energy ⚡</p>
+</footer>
+
+<!-- ======= JS SECTION ======= -->
 <script>
-  const menuItems = ['Severn', 'Project 2', 'Project 3', 'Project 4', 'Project 5'];
-  const menu = document.getElementById('menu');
-  const openSound = document.getElementById('openSound');
-  const closeSound = document.getElementById('closeSound');
+// Smooth scrolling
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
 
-  let highestZ = 100;
+// Neon cursor
+const cursor = document.querySelector(".cursor");
 
-  menuItems.forEach(text => {
-    const item = document.createElement('div');
-    item.classList.add('menu-item');
-    item.textContent = text;
-    item.addEventListener('click', () => openWindow(text));
-    menu.appendChild(item);
-  });
+document.addEventListener("mousemove", (e) => {
+  cursor.style.left = e.pageX + "px";
+  cursor.style.top = e.pageY + "px";
+  cursor.style.transform = "scale(1)";
+});
 
-  function openWindow(title){
-    const win = document.createElement('div');
-    win.classList.add('window');
-    win.style.top = (50 + Math.random()*100)+'px';
-    win.style.left = (50 + Math.random()*100)+'px';
-    win.style.zIndex = ++highestZ;
+document.addEventListener("mousedown", () => {
+  cursor.style.transform = "scale(0.5)";
+});
 
-    const header = document.createElement('div');
-    header.classList.add('window-header');
-    header.innerHTML = `<span>${title}</span>`;
-    const closeBtn = document.createElement('div');
-    closeBtn.classList.add('close-btn');
-    closeBtn.textContent = 'X';
-    closeBtn.onclick = ()=>{
-      closeSound.currentTime = 0;
-      closeSound.play();
-      document.body.removeChild(win);
-    };
-    header.appendChild(closeBtn);
-    win.appendChild(header);
-
-    const content = document.createElement('div');
-    content.classList.add('window-content');
-    content.innerHTML = `<p>Welcome to ${title}!</p><p>This is a retro 2000s style window.</p>`;
-    win.appendChild(content);
-
-    document.body.appendChild(win);
-
-    // Play open sound
-    openSound.currentTime = 0;
-    openSound.play();
-
-    // Dragging
-    let isDragging=false, offsetX=0, offsetY=0;
-    header.addEventListener('mousedown', e=>{
-      isDragging=true;
-      offsetX = e.clientX - win.offsetLeft;
-      offsetY = e.clientY - win.offsetTop;
-      win.style.zIndex = ++highestZ;
-    });
-    window.addEventListener('mouseup', ()=> isDragging=false);
-    window.addEventListener('mousemove', e=>{
-      if(isDragging){
-        win.style.left = (e.clientX-offsetX)+'px';
-        win.style.top = (e.clientY-offsetY)+'px';
-      }
-    });
-  }
-
-  // --- Background starfield ---
-  const canvas = document.getElementById('bgCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const stars=[];
-  for(let i=0;i<200;i++){
-    stars.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height,
-      size: Math.random()*2+1,
-      speed: Math.random()*0.5+0.2
-    });
-  }
-
-  function drawStars(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='#00ffff';
-    stars.forEach(s=>{
-      ctx.beginPath();
-      ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
-      ctx.fill();
-      s.y+=s.speed;
-      if(s.y>canvas.height) s.y=0;
-    });
-    requestAnimationFrame(drawStars);
-  }
-  drawStars();
-
-  window.addEventListener('resize', ()=>{
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
-  });
+document.addEventListener("mouseup", () => {
+  cursor.style.transform = "scale(1)";
+});
 </script>
+
 </body>
 </html>
