@@ -343,12 +343,26 @@ function go(id) {
 
 /* CURSOR FOLLOW */
 const cursor = document.getElementById("cursor");
+
+let mouseX = 0, mouseY = 0;
+let cursorX = 0, cursorY = 0;
+const speed = 0.15; // lower = slower/lazier follow
+
 document.addEventListener("mousemove", e => {
-  cursor.style.left = e.pageX + "px";
-  cursor.style.top = e.pageY + "px";
+  mouseX = e.clientX;
+  mouseY = e.clientY;
 });
-document.addEventListener("mousedown", () => cursor.style.transform = "scale(0.6)");
-document.addEventListener("mouseup", () => cursor.style.transform = "scale(1)");
+
+function animateCursor() {
+  // Move cursor a fraction toward the mouse each frame
+  cursorX += (mouseX - cursorX) * speed;
+  cursorY += (mouseY - cursorY) * speed;
+
+  cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+  requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
 
 /* LOADER */
 setTimeout(() => {
