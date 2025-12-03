@@ -1,0 +1,41 @@
+name: Deploy Selected Directory to Root
+
+on:
+  workflow_dispatch:
+    inputs:
+      dir_to_push:
+        description: 'Directory to push to root'
+        required: true
+        default: 'beta/canary'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Needed to push changes
+
+    - name: Set up Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Copy Selected Directory to Root
+      run: |
+        DIR="${{ github.event.inputs.dir_to_push }}"
+        if [ ! -d "$DIR" ]; then
+          echo "Directory $DIR does not exist!"
+          exit 1
+        fi
+        echo "Copying $DIR to root..."
+        shopt -s dotglob # Include hidden files
+        rsync -a --exclude='.git' --delete "$DIR"/ ./
+
+    - name: Commit and Push changes
+      run: |
+        git add .
+        git commit -m "Deploy ${{ github.event.inputs.dir_to_push }} to root [skip ci]" || echo "No changes to commit"
+        git push origin HEAD:main
