@@ -17,6 +17,13 @@ body {
   color: #e0e0ff;
   text-shadow: 0 0 4px #00ffff;
   overflow-x: hidden;
+  cursor: none;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+ textdecoration: underline; 
 }
 
 ::-webkit-scrollbar {
@@ -201,8 +208,8 @@ footer {
   <h2 style="text-align:center; margin-bottom:40px;">Things To Do</h2>
 
   <div class="card">
-    <h2>Paint App</h2>
-    <p>Draw freely with your mouse!</p>
+    <h2>Paint</h2>
+    <p>Just a Paint thingy</p>
     <div style="text-align:center;">
       <button class="tool-button" onclick="clearCanvas()">Clear</button>
       <button class="tool-button" onclick="setColor('cyan')">Cyan</button>
@@ -211,21 +218,6 @@ footer {
       <button class="tool-button" onclick="setColor('white')">White</button>
     </div>
     <canvas id="paintCanvas" width="800" height="400"></canvas>
-  </div>
-
-  <div class="card">
-    <h2>Number Guesser</h2>
-    <p>Try to guess the number between 1 and 100!</p>
-    <input type="number" id="guessInput" placeholder="Enter your guess" style="font-family:inherit;">
-    <button class="tool-button" onclick="checkGuess()">Guess</button>
-    <p id="guessResult"></p>
-  </div>
-
-  <div class="card">
-    <h2>Random Quote Generator</h2>
-    <p>Click the button to get a random motivational quote.</p>
-    <button class="tool-button" onclick="generateQuote()">Generate Quote</button>
-    <p id="quoteDisplay"></p>
   </div>
 
 </div>
@@ -285,34 +277,6 @@ function clearCanvas() {
 
 function setColor(c) {
   color = c;
-}
-
-/* ========== NUMBER GUESSER ========== */
-const numberToGuess = Math.floor(Math.random() * 100) + 1;
-function checkGuess() {
-  const guess = parseInt(document.getElementById('guessInput').value);
-  const result = document.getElementById('guessResult');
-  if (guess === numberToGuess) {
-    result.textContent = "Correct! You guessed it!";
-  } else if (guess < numberToGuess) {
-    result.textContent = "Too low!";
-  } else {
-    result.textContent = "Too high!";
-  }
-}
-
-/* ========== RANDOM QUOTES ========== */
-const quotes = [
-  "Keep going, you’re doing great!",
-  "Every expert was once a beginner.",
-  "Dream big, act bigger.",
-  "Mistakes are proof that you’re trying.",
-  "Stay curious and explore!"
-];
-
-function generateQuote() {
-  const randomIndex = Math.floor(Math.random() * quotes.length);
-  document.getElementById('quoteDisplay').textContent = quotes[randomIndex];
 }
 </script>
 
