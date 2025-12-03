@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stormzady's Place — Hyper Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   GLOBAL
+============================================================ */
+body {
+  margin: 0;
+  background: #000;
+  font-family: "Press Start 2P", cursive;
+  color: #e0e0ff;
+  text-shadow: 0 0 4px #00ffff;
+  overflow-x: hidden;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: #00ffff; }
+
+/* CUSTOM CURSOR */
+#cursor {
+  width: 14px;
+  height: 14px;
+  border: 2px solid cyan;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+  z-index: 10000;
+}
+
+/* ============================================================
+   PARTICLE BACKGROUND
+============================================================ */
+#particles {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background: transparent;
+}
+
+/* ============================================================
+   BOOT LOADING SCREEN
+============================================================ */
+#loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: black;
+  color: cyan;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  font-size: 12px;
+}
+
+#loader p {
+  animation: flicker 1.2s infinite alternate;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+nav {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 50;
+}
+
+nav button {
+  font-family: inherit;
+  padding: 10px 14px;
+  margin-left: 6px;
+  background: #111;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  cursor: pointer;
+  font-size: 10px;
+  transition: 0.2s;
+}
+
+nav button:hover {
+  background: #00ffff;
+  color: #111;
+}
+
+/* THEME TOGGLE */
+#themeToggle {
+  margin-left: 12px;
+}
+
+/* ============================================================
+   HERO HEADER + 3D CUBE
+============================================================ */
+header {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 48px;
+  text-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+}
+
+#cube {
+  width: 140px;
+  height: 140px;
+  margin: 40px auto 0;
+  transform-style: preserve-3d;
+  animation: spin 6s linear infinite;
+}
+
+.cube-face {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background: rgba(0,255,255,0.2);
+  border: 2px solid cyan;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes spin {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* ============================================================
+   SECTIONS
+============================================================ */
+.section {
+  padding: 80px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* ABOUT ME — GLITCH TEXT */
+.glitch {
+  font-size: 18px;
+  position: relative;
+  color: #00ffff;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  text-shadow: -2px 0 magenta;
+  top: 0;
+  overflow: hidden;
+  animation: glitch 1.5s infinite;
+}
+
+.glitch::after {
+  text-shadow: 2px 0 cyan;
+  animation-duration: 2s;
+}
+
+@keyframes glitch {
+  0% { clip-path: inset(10% 0 90% 0); }
+  50% { clip-path: inset(40% 0 20% 0); }
+  100% { clip-path: inset(15% 0 75% 0); }
+}
+
+/* PROJECT CARDS */
+.card {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 25px;
+  border-radius: 14px;
+  border: 2px solid #00ffff;
+  margin-bottom: 30px;
+  box-shadow: 0 0 15px #00ffff80;
+  transition: 0.3s;
+  transform: perspective(600px) rotateX(0) rotateY(0);
+}
+
+.card:hover {
+  transform: perspective(600px) rotateX(6deg) rotateY(-6deg);
+  box-shadow: 0 0 25px #00ffff;
+}
+
+/* ============================================================
+   TERMINAL CONSOLE
+============================================================ */
+#terminal {
+  background: rgba(0,0,0,0.7);
+  border: 2px solid cyan;
+  padding: 20px;
+  color: lime;
+  font-size: 12px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#terminalInput {
+  width: 100%;
+  background: black;
+  border: 2px solid cyan;
+  color: lime;
+  padding: 6px;
+  margin-top: 10px;
+  font-family: inherit;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer {
+  text-align: center;
+  padding: 40px;
+  opacity: 0.6;
+  font-size: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PARTICLES -->
+<canvas id="particles"></canvas>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+
+<!-- BOOT LOADING SCREEN -->
+<div id="loader">
+  <p>BOOTING STORMZADY OS...</p>
+  <p>LOADING NEON MODULES...</p>
+</div>
+
+<!-- NAV -->
+<nav>
+  <button onclick="go('home')">Home</button>
+  <button onclick="go('about')">About</button>
+  <button onclick="go('projects')">Projects</button>
+  <button onclick="go('contact')">Contact</button>
+  <button id="themeToggle">Theme</button>
+</nav>
+
+<!-- HEADER -->
+<header id="home">
+  <h1>Stormzady's Place</h1>
+  <p>Bots · Tools · Experiments</p>
+
+  <!-- 3D CUBE -->
+  <div id="cube">
+    <div class="cube-face" style="transform: rotateY(0deg) translateZ(70px);"></div>
+    <div class="cube-face" style="transform: rotateY(90deg) translateZ(70px);"></div>
+    <div class="cube-face" style="transform: rotateY(180deg) translateZ(70px);"></div>
+    <div class="cube-face" style="transform: rotateY(-90deg) translateZ(70px);"></div>
+    <div class="cube-face" style="transform: rotateX(90deg) translateZ(70px);"></div>
+    <div class="cube-face" style="transform: rotateX(-90deg) translateZ(70px);"></div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<div id="about" class="section">
+  <h2 style="text-align:center;">About Me</h2>
+  <p class="glitch" data-text="Creator. Developer. Chaos Enthusiast.">
+    Creator. Developer. Chaos Enthusiast.
+  </p>
+</div>
+
+<!-- PROJECTS -->
+<div id="projects" class="section">
+  <h2 style="text-align:center; margin-bottom:40px;">My Projects</h2>
+
+  <div class="card">
+    <h2>Severn — Discord Bot</h2>
+    <p>A fun based Discord bot with Krystal integration.</p>
+    <p><a href="#">Add to Discord</a></p>
+  </div>
+
+  <div class="card">
+    <h2>Lifeboat — Browser in Shortcuts</h2>
+    <p>A micro-browser built entirely inside Apple Shortcuts.</p>
+    <p><a href="#">Add Lifeboat</a></p>
+  </div>
+
+  <div class="card">
+    <h2>More Projects Coming Soon</h2>
+    <p>I'm always building more—chaos demands it.</p>
+  </div>
+</div>
+
+<!-- TERMINAL -->
+<div class="section">
+  <h2 style="text-align:center;">Terminal</h2>
+  <div id="terminal"></div>
+  <input id="terminalInput" placeholder="Type a command (help)">
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="section">
+  <h2 style="text-align:center;">Get in Contact!</h2>
+  <div class="card">
+    <p>
+      <a href="#">Discord</a> • 
+      <a href="#">GitHub</a> • 
+      <a href="#">GitHub (alt)</a>
+    </p>
+  </div>
+</div>
+
+<footer>
+  © 2025 Stormzady — Misona Mika forever <3
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT MAGIC
+============================================================ -->
+<script>
+/* SMOOTH SCROLL */
+function go(id) {
+  document.getElementById(id).scrollIntoView({behavior: "smooth"});
+}
+
+/* CURSOR FOLLOW */
+const cursor = document.getElementById("cursor");
+document.addEventListener("mousemove", e => {
+  cursor.style.left = e.pageX + "px";
+  cursor.style.top = e.pageY + "px";
+});
+document.addEventListener("mousedown", () => cursor.style.transform = "scale(0.6)");
+document.addEventListener("mouseup", () => cursor.style.transform = "scale(1)");
+
+/* LOADER */
+setTimeout(() => {
+  document.getElementById("loader").style.display = "none";
+}, 2500);
+
+/* PARTICLES */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let particles = [];
+for (let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    s: Math.random() * 2 + 1,
+    v: Math.random() * 0.5 + 0.2
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p => {
+    ctx.fillStyle = "cyan";
+    ctx.fillRect(p.x,p.y,p.s,p.s);
+    p.y += p.v;
+    if (p.y > canvas.height) p.y = 0;
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* TERMINAL */
+const terminal = document.getElementById("terminal");
+const terminalInput = document.getElementById("terminalInput");
+
+function termPrint(text) {
+  terminal.innerHTML += text + "<br>";
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+terminalInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    const cmd = terminalInput.value.toLowerCase();
+    terminalInput.value = "";
+    termPrint("> " + cmd);
+
+    if (cmd === "help") termPrint("Commands: help, hi, about, clear, love");
+    else if (cmd === "hi") termPrint("Hello chaotic traveler.");
+    else if (cmd === "about") termPrint("Stormzady: maker of bots, chaos, and neon dreams.");
+    else if (cmd === "love") termPrint("<3 <3 <3");
+    else if (cmd === "clear") terminal.innerHTML = "";
+    else termPrint("Unknown command.");
+  }
+});
+
+/* THEME TOGGLE */
+let theme = 0;
+document.getElementById("themeToggle").onclick = () => {
+  theme = (theme + 1) % 3;
+  if (theme === 0) document.body.style.background = "linear-gradient(135deg,#120033,#330066,#000)";
+  if (theme === 1) document.body.style.background = "black";
+  if (theme === 2) document.body.style.background = "linear-gradient(135deg,#ff00ff,#00ffff,#000)";
+};
+</script>
+
+</body>
+</html>
