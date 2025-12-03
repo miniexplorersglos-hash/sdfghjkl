@@ -2,194 +2,201 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Stormzady — Y2K Zone</title>
+<title>Stormzady — Tech Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Pixel Font -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
-/* ======= Y2K CSS ======= */
-
+/* ========== GLOBAL ========== */
 body {
   margin: 0;
+  background: linear-gradient(135deg, #120033, #330066, #000000);
   font-family: "Press Start 2P", cursive;
-  background: radial-gradient(circle at top, #ffccff, #444);
-  color: #ffffff;
+  color: #e0e0ff;
+  text-shadow: 0 0 4px #00ffff;
   overflow-x: hidden;
-  cursor: none;
 }
 
-/* Custom neon cursor */
-.cursor {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  border: 2px solid #00ffff;
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #00ffff;
+}
+
+/* ========== CURSOR ========== */
+#cursor {
+  width: 14px;
+  height: 14px;
+  border: 2px solid cyan;
   border-radius: 50%;
+  position: fixed;
   pointer-events: none;
   mix-blend-mode: difference;
-  transition: transform 0.1s ease-out;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+  z-index: 999;
 }
 
-header {
-  text-align: center;
-  padding: 60px 20px;
-}
-
-.glow {
-  font-size: 50px;
-  color: #fff;
-  text-shadow: 0 0 10px #00eaff, 0 0 25px #00eaff, 0 0 50px #00eaff;
-}
-
-.subtitle {
-  margin-top: 10px;
-  font-size: 14px;
-  opacity: 0.9;
-}
-
+/* ========== NAV ========== */
 nav {
-  text-align: center;
-  margin-top: 20px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
 }
 
-.nav-btn {
+nav button {
   font-family: inherit;
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  background: linear-gradient(135deg, #cc00ff, #00ccff);
-  color: white;
-  box-shadow: 0 0 10px #fff;
-  cursor: pointer;
-}
-
-.nav-btn:hover {
-  transform: scale(1.1);
-}
-
-.panel {
-  padding: 80px 20px;
-  margin: 50px auto;
-  background: rgba(0, 0, 0, 0.35);
-  width: 80%;
-  border-radius: 20px;
-  box-shadow: 0 0 25px #ff00ff, 0 0 40px #00ffff;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 0 0 8px cyan;
-}
-
-.highlight {
+  padding: 10px 14px;
+  margin-left: 6px;
+  background: #111;
+  border: 2px solid #00ffff;
   color: #00ffff;
-  text-shadow: 0 0 6px #00ffff;
+  cursor: pointer;
+  font-size: 10px;
+}
+nav button:hover {
+  background: #00ffff;
+  color: #111;
 }
 
-/* Gallery fake cards */
-.img-grid {
+/* ========== HEADER ========== */
+header {
+  height: 100vh;
   display: flex;
-  gap: 20px;
+  flex-direction: column;
   justify-content: center;
+  text-align: center;
 }
 
-.img-card {
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(135deg, #ff00ff, #0066ff);
-  border-radius: 10px;
-  box-shadow: 0 0 20px #fff;
+header h1 {
+  font-size: 48px;
+  text-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
 }
 
-.y2k-btn {
-  display: inline-block;
+header p {
   margin-top: 10px;
-  padding: 15px 30px;
-  background: linear-gradient(135deg, #00ffff, #9933ff);
-  text-decoration: none;
-  color: black;
-  box-shadow: 0 0 20px cyan;
+  opacity: 0.8;
 }
 
-.y2k-btn:hover {
-  filter: brightness(1.2);
+/* ========== SECTIONS ========== */
+.section {
+  padding: 80px 20px;
+  max-width: 900px;
+  margin: auto;
 }
 
+.card {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 25px;
+  border-radius: 14px;
+  border: 2px solid #00ffff;
+  margin-bottom: 30px;
+  box-shadow: 0 0 15px #00ffff80;
+}
+
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.card a {
+  color: #00ffff;
+  text-decoration: underline;
+}
+
+/* ========== FOOTER ========== */
 footer {
   text-align: center;
-  padding: 20px;
-  opacity: 0.7;
+  padding: 40px;
+  opacity: 0.6;
   font-size: 10px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="cursor"></div>
-
-<header>
-  <h1 class="glow">STORMZADY</h1>
-  <p class="subtitle">Welcome to the Y2K Dimension</p>
-</header>
+<div id="cursor"></div>
 
 <nav>
-  <button class="nav-btn" onclick="scrollToSection('about')">About</button>
-  <button class="nav-btn" onclick="scrollToSection('gallery')">Gallery</button>
-  <button class="nav-btn" onclick="scrollToSection('contact')">Contact</button>
+  <button onclick="go('home')">Home</button>
+  <button onclick="go('projects')">Projects</button>
+  <button onclick="go('contact')">Contact</button>
 </nav>
 
-<section id="about" class="panel">
-  <h2>About Me</h2>
-  <p>Hey! I'm <span class="highlight">Stormzady</span>. I love chaotic aesthetics, chrome textures, retro cyberspace 
-     vibes, and anything that looks like it came from a 2003 desktop wallpaper folder.</p>
-</section>
+<header id="home">
+  <h1>STORMZADY</h1>
+  <p>Tech · Bots · Tools · Experiments · Y2K Vibes</p>
+</header>
 
-<section id="gallery" class="panel">
-  <h2>Gallery</h2>
-  <div class="img-grid">
-    <div class="img-card"></div>
-    <div class="img-card"></div>
-    <div class="img-card"></div>
+<div id="projects" class="section">
+
+  <h2 style="text-align:center; margin-bottom:40px;">MY PROJECTS</h2>
+
+  <div class="card">
+    <h2>SEVERN — Discord Bot</h2>
+    <p>
+      A multi-feature Discord bot focused on utility, fun, and fast responses.  
+      Currently supports moderation, automation, information tools, and expanding features.
+    </p>
+    <p><a href="#">Add to Discord (link)</a></p>
   </div>
-</section>
 
-<section id="contact" class="panel">
-  <h2>Contact</h2>
-  <p>Hit me up if you like the vibes ✨</p>
-  <a href="#" class="y2k-btn">Email Me</a>
-</section>
+  <div class="card">
+    <h2>LIFEBOAT — Browser in Apple Shortcuts</h2>
+    <p>
+      A fully functional “micro-browser” created entirely inside Apple Shortcuts.  
+      Designed to be lightweight, hacky, and fast — an experimental web navigator made from automation tools.
+    </p>
+    <p><a href="#">Download Lifeboat (link)</a></p>
+  </div>
+
+  <div class="card">
+    <h2>More Projects Coming Soon</h2>
+    <p>
+      This is my digital playground — expect more tools, bots, web experiments, and Y2K-infused tech creations.
+    </p>
+  </div>
+</div>
+
+<div id="contact" class="section">
+  <h2 style="text-align:center; margin-bottom:40px;">CONTACT</h2>
+  <div class="card">
+    <p>Want to reach out, collaborate, or follow my work?</p>
+    <p>
+      <a href="#">Discord</a> • 
+      <a href="#">GitHub</a> • 
+      <a href="#">Instagram</a>
+    </p>
+  </div>
+</div>
 
 <footer>
-  <p>© 2025 Stormzady — Powered by Y2K Energy ⚡</p>
+  © 2025 Stormzady — Powered by caffeine + chaos
 </footer>
 
-<!-- ======= JS SECTION ======= -->
 <script>
-// Smooth scrolling
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+/* Smooth scroll */
+function go(id) {
+  document.getElementById(id).scrollIntoView({behavior: "smooth"});
 }
 
-// Neon cursor
-const cursor = document.querySelector(".cursor");
-
-document.addEventListener("mousemove", (e) => {
+/* Cursor glow */
+const cursor = document.getElementById("cursor");
+document.addEventListener("mousemove", e => {
   cursor.style.left = e.pageX + "px";
   cursor.style.top = e.pageY + "px";
-  cursor.style.transform = "scale(1)";
 });
-
-document.addEventListener("mousedown", () => {
-  cursor.style.transform = "scale(0.5)";
-});
-
-document.addEventListener("mouseup", () => {
-  cursor.style.transform = "scale(1)";
-});
+document.addEventListener("mousedown", () => cursor.style.transform = "scale(0.6)");
+document.addEventListener("mouseup", () => cursor.style.transform = "scale(1)");
 </script>
 
 </body>
