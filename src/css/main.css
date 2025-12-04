@@ -40,16 +40,18 @@ a {
 
 /* CUSTOM CURSOR */
 #cursor {
-  position: fixed;
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid cyan;
   border-radius: 50%;
+  position: fixed;
   pointer-events: none;
+  mix-blend-mode: difference;
   transform: translate(-50%, -50%);
-  transition: background 0.3s ease, transform 0.1s ease;
+  transition: transform 0.1s, background 0.2s;
   z-index: 9999;
-  background: transparent;
 }
+
 /* NAV */
 nav {
   position: fixed;
