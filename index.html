@@ -14,7 +14,7 @@
 <!-- BOOT SCREEN -->
 <div id="boot">
   <p>Starting Stormzady's Place...</p>
-  <p id="speed"></p>
+  <p id="speed">Your internet is... (might be too slow)</p>
   <p>Loading Complete!</p>
 </div>
 
@@ -83,19 +83,36 @@ function go(id) {
   document.getElementById(id).scrollIntoView({ behavior: "smooth" });
 }
 
-/* Cursor movement */
+/* Custom Cursor */
 const cursor = document.getElementById("cursor");
+
 document.addEventListener("mousemove", e => {
   cursor.style.left = e.clientX + "px";
   cursor.style.top = e.clientY + "px";
 });
+
 document.addEventListener("mousedown", () => (cursor.style.transform = "scale(0.6)"));
 document.addEventListener("mouseup", () => (cursor.style.transform = "scale(1)"));
 
-// Hover effect on links and buttons
-document.querySelectorAll("a, button").forEach(el => {
-  el.addEventListener("mouseenter", () => (cursor.style.background = "#00ffff33"));
-  el.addEventListener("mouseleave", () => (cursor.style.background = "transparent"));
+// Multi-color hover
+document.querySelectorAll("*").forEach(el => {
+  el.addEventListener("mouseenter", () => {
+    if (el.tagName === "BUTTON") {
+      cursor.style.background = "#00ffff"; // Neon Cyan
+    } else if (el.tagName === "A") {
+      cursor.style.background = "#ff00ff"; // Neon Pink
+    } else if (el.classList.contains("card")) {
+      cursor.style.background = "#ffff66"; // Soft Yellow
+    } else if (el.tagName === "HEADER") {
+      cursor.style.background = "#66ff66"; // Light Green
+    } else {
+      cursor.style.background = "transparent"; // Default
+    }
+  });
+
+  el.addEventListener("mouseleave", () => {
+    cursor.style.background = "transparent";
+  });
 });
 
 // Boot animation timeout
@@ -103,15 +120,16 @@ window.addEventListener("load", () => {
   setTimeout(() => {
     document.getElementById("boot").style.display = "none";
   }, 4000); // 4 seconds boot-up
+
+  testSpeed(); // run speed test
 });
 
 window.onbeforeunload = function () {
-window.scrollTo(0, 0);
+  window.scrollTo(0, 0);
 }
+
 async function testSpeed() {
   const speedText = document.getElementById("speed");
-
-  // A small file you host (1–5 MB recommended)
   const fileUrl = "https://your-remote-server.com/testfile_24MB.bin?nocache=" + Date.now();
   const start = performance.now();
   const response = await fetch(fileUrl + "?x=" + Math.random());
@@ -124,15 +142,7 @@ async function testSpeed() {
 
   speedText.textContent = mbps + " Mbps...";
 }
-
-window.addEventListener("load", () => {
-  testSpeed(); // run speed test
-  setTimeout(() => {
-    document.getElementById("boot").style.display = "none";
-  }, 4000);
-});
 </script>
 
 </body>
 </html>
-
