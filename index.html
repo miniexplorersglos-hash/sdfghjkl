@@ -179,27 +179,29 @@ window.addEventListener("load", () => {
     document.getElementById("boot").style.display = "none";
   }, 4000);
 });
-let currentScroll = window.scrollY;
-let targetScroll = window.scrollY;
-const scrollSpeed = 0.08; // smaller = more lag, bigger = snappier
+<script>
+let currentScroll = 0;   // our custom scroll position
+let targetScroll = 0;    // where we want to scroll
+const scrollSpeed = 0.08; // lag speed (smaller = more floaty)
 
-// Update target scroll whenever the user scrolls
-window.addEventListener("scroll", () => {
-  targetScroll = window.scrollY;
-});
+// Prevent default scroll and update target
+window.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  targetScroll += e.deltaY; // accumulate scroll delta
+  // Clamp target to document bounds
+  targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
+}, { passive: false });
 
-// Animate the smooth lagged scroll
+// Animate the scroll
 function animateScroll() {
-  // Interpolate between current and target scroll
   currentScroll += (targetScroll - currentScroll) * scrollSpeed;
-
-  // Apply the scroll
   window.scrollTo(0, currentScroll);
-
   requestAnimationFrame(animateScroll);
 }
 
 animateScroll();
+</script>
+
 </script>
 </body>
 </html>
