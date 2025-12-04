@@ -14,16 +14,16 @@
 <!-- BOOT SCREEN -->
 <div id="boot">
   <p>Starting Stormzady's Place...</p>
-  <p>11Mbps...</p>
+  <p id="speed"></p>
   <p>Loading Complete!</p>
 </div>
 
 <div id="cursor"></div>
 
 <nav>
-  <button onclick="go('home')">Home</button>
+  <button onclick="go('home')">The Cube</button>
   <button onclick="go('projects')">Projects</button>
-  <button onclick="go('contact')">Contact</button>
+  <button onclick="go('contact')">Contact me</button>
 </nav>
 
 <header id="home">
@@ -74,7 +74,7 @@
 </div>
 
 <footer>
-© 2025 Stormzady —<span class="neon-pink"> Misona Mika forever</span>
+© 2025 Stormzady —<span class="neon-pink"> Misona Mika forever <3</span>
 </footer>
 
 <script>
@@ -108,6 +108,30 @@ window.addEventListener("load", () => {
 window.onbeforeunload = function () {
 window.scrollTo(0, 0);
 }
+async function testSpeed() {
+  const speedText = document.getElementById("speed");
+
+  // A small file you host (1–5 MB recommended)
+  const fileUrl = "https://stormzady.xyz/speedt.bin";
+
+  const start = performance.now();
+  const response = await fetch(fileUrl + "?x=" + Math.random());
+  const blob = await response.blob();
+  const end = performance.now();
+
+  const bits = blob.size * 8;
+  const seconds = (end - start) / 1000;
+  const mbps = (bits / seconds / 1024 / 1024).toFixed(1);
+
+  speedText.textContent = mbps + " Mbps...";
+}
+
+window.addEventListener("load", () => {
+  testSpeed(); // run speed test
+  setTimeout(() => {
+    document.getElementById("boot").style.display = "none";
+  }, 4000);
+});
 </script>
 
 </body>
