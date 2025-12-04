@@ -217,3 +217,38 @@ footer {
     0 0 40px  #ff66ff,
     0 0 80px  #ff99ff;
 }
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+  gap: 10px;
+}
+
+#search-box {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 2px solid #00ffff;
+  outline: none;
+  width: 250px;
+}
+
+#search-box:focus {
+  border-color: #ff00ff;
+}
+
+#search-btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #00ffff;
+  color: #000;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#search-btn:hover {
+  background-color: #ff00ff;
+}
+
