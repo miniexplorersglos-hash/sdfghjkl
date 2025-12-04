@@ -169,30 +169,29 @@ window.addEventListener("load", () => {
     document.getElementById("boot").style.display = "none";
   }, 4000);
 });
-// Get modal elements
 const modal = document.getElementById("iframeModal");
 const iframe = document.getElementById("iframePopup");
 const closeBtn = modal.querySelector(".close");
 
-// Open modal when link clicked
-document.querySelectorAll("a").forEach(link => {
-  if(link.href === "https://dcreator112.xyz") {
-    link.addEventListener("click", e => {
-      e.preventDefault(); // prevent default navigation
-      iframe.src = link.href; // set iframe src
-      modal.style.display = "flex"; // show modal
-    });
-  }
+// Select all links inside the "connections" section
+const connectionLinks = document.querySelectorAll("#connections a");
+
+connectionLinks.forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();       // Prevent navigation
+    iframe.src = link.href;   // Load link in iframe
+    modal.style.display = "flex"; // Show modal
+  });
 });
 
-// Close modal
+// Close modal on X button
 closeBtn.addEventListener("click", () => {
   modal.style.display = "none";
-  iframe.src = ""; // reset iframe
+  iframe.src = "";
 });
 
 // Close modal when clicking outside content
-window.addEventListener("click", (e) => {
+window.addEventListener("click", e => {
   if (e.target === modal) {
     modal.style.display = "none";
     iframe.src = "";
