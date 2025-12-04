@@ -179,39 +179,6 @@ window.addEventListener("load", () => {
     document.getElementById("boot").style.display = "none";
   }, 4000);
 });
-let currentScroll = window.scrollY; // current scroll position
-let targetScroll = window.scrollY;  // where we want to scroll
-const scrollSpeed = 0.08;           // smaller = more lag, bigger = snappier
-
-// Intercept scroll events
-window.addEventListener("wheel", (e) => {
-  e.preventDefault();               // prevent native scroll
-  targetScroll += e.deltaY;         // accumulate scroll
-  // Clamp target to document bounds
-  targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
-}, { passive: false });
-
-// Optional: handle keyboard arrows/pageup/pagedown
-window.addEventListener("keydown", (e) => {
-  const step = 100; // scroll step
-  if (e.key === "ArrowDown") targetScroll += step;
-  if (e.key === "ArrowUp") targetScroll -= step;
-  if (e.key === "PageDown") targetScroll += window.innerHeight;
-  if (e.key === "PageUp") targetScroll -= window.innerHeight;
-
-  // Clamp
-  targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
-});
-
-// Animate scroll
-function animateScroll() {
-  currentScroll += (targetScroll - currentScroll) * scrollSpeed;
-  window.scrollTo(0, currentScroll);
-  requestAnimationFrame(animateScroll);
-}
-
-// Start the animation
-animateScroll();
 </script>
 </body>
 </html>
