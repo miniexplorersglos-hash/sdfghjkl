@@ -179,6 +179,27 @@ window.addEventListener("load", () => {
     document.getElementById("boot").style.display = "none";
   }, 4000);
 });
+let currentScroll = window.scrollY;
+let targetScroll = window.scrollY;
+const scrollSpeed = 0.08; // smaller = more lag, bigger = snappier
+
+// Update target scroll whenever the user scrolls
+window.addEventListener("scroll", () => {
+  targetScroll = window.scrollY;
+});
+
+// Animate the smooth lagged scroll
+function animateScroll() {
+  // Interpolate between current and target scroll
+  currentScroll += (targetScroll - currentScroll) * scrollSpeed;
+
+  // Apply the scroll
+  window.scrollTo(0, currentScroll);
+
+  requestAnimationFrame(animateScroll);
+}
+
+animateScroll();
 </script>
 </body>
 </html>
