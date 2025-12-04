@@ -112,8 +112,7 @@ async function testSpeed() {
   const speedText = document.getElementById("speed");
 
   // A small file you host (1–5 MB recommended)
-  const fileUrl = "https://stormzady.xyz/speedt.bin";
-
+  const fileUrl = "https://your-remote-server.com/testfile_24MB.bin?nocache=" + Date.now();
   const start = performance.now();
   const response = await fetch(fileUrl + "?x=" + Math.random());
   const blob = await response.blob();
