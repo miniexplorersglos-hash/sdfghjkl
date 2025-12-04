@@ -316,6 +316,10 @@ window.addEventListener("load", () => {
     document.getElementById("boot").style.display = "none";
   }, 4000); // 4 seconds boot-up
 });
+
+window.onbeforeunload = function () {
+window.scrollTo(0, 0);
+}
 </script>
 
 </body>
