@@ -3,8 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Deploy whenever main is updated
-  workflow_dispatch:  # Allow manual trigger
+      - main
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
 
 permissions:
   contents: read
@@ -17,14 +22,34 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || github.ref_name }}
 
-      # If your site is static HTML/CSS/JS, nothing else needed.
-      # If you're using a build tool (npm, Hugo, Jekyll, etc.), add steps here.
+      - name: Determine branch to deploy
+        id: branch_check
+        run: |
+          BRANCH=""
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            BRANCH="${{ github.event.inputs.branch }}"
+          else
+            # Automatic push
+            if [ -f ".last_deployed" ]; then
+              LAST_DEPLOYED=$(cat .last_deployed)
+              if [ "$LAST_DEPLOYED" != "main" ]; then
+                echo "Last deployment was not main. Skipping automatic deployment."
+                exit 78  # GitHub Actions neutral exit (skips deploy)
+              fi
+            fi
+            BRANCH="${GITHUB_REF_NAME}"
+          fi
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      # Add build steps here if needed (npm, Jekyll, Hugo, etc.)
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./  # Path to your built site (use dist/, build/, etc. if needed)
+          path: ./  # Adjust to your build output if needed
 
   deploy:
     needs: build
@@ -32,8 +57,11 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Record last deployed branch
+        if: ${{ success() }}
+        run: echo "${{ steps.branch_check.outputs.branch }}" > .last_deployed
