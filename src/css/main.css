@@ -1,75 +1,210 @@
+/* ========== GLOBAL ========== */
+html, body {
+overflow: hidden;
+height: 100%;
+overflow: auto;
+height: 100%;
+overscroll-behavior: none;
+}
 body {
-  background: linear-gradient(to bottom, #000033, #000000);
-  font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 0;
+  background: linear-gradient(135deg, #120033, #330066, #000000);
+  font-family: "Press Start 2P", cursive;
+  color: #e0e0ff;
+  text-shadow: 0 0 4px #00ffff;
+  overflow-x: hidden;
+  cursor: none; /* hide default pointer */
+}
+
+head {
+  margin: 0;
+  background: linear-gradient(135deg, #120033, #330066, #000000);
+  font-family: "Press Start 2P", cursive;
+  color: #e0e0ff;
+  text-shadow: 0 0 4px #00ffff;
+  overflow-x: hidden;
+  cursor: none; /* hide default pointer */
+}
+
+a {
+  cursor: none;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #00ffff;
+}
+
+/* CUSTOM CURSOR */
+#cursor {
+  width: 14px;
+  height: 14px;
+  border: 2px solid cyan;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, background 0.2s;
+  z-index: 9999;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+}
+
+nav button {
+  font-family: inherit;
+  padding: 10px 14px;
+  margin-left: 6px;
+  background: #111;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  cursor: none;
+  font-size: 10px;
+}
+nav button:hover {
+  background: #00ffff;
+  color: #111;
+}
+
+/* HEADER */
+header {
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  color: #00bbff;
+  text-align: center;
+  position: relative;
+  perspective: 800px; /* for 3D effect on cube */
 }
-h1 {
-  margin-top: 50px;
+
+header h1 {
   font-size: 48px;
-  text-align: center;
-  color: #00bbff;
-  text-shadow: 0 0 5px #00bbff, 0 0 10px #00f;
+  text-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+  margin-bottom: 10px;
 }
-.menu {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 50px;
-  gap: 40px;
+
+header p {
+  margin-top: 10px;
+  opacity: 0.8;
+  margin-bottom: 60px;
 }
-.menu-item {
-  width: 220px;
-  height: 120px;
-  background-color: #001155;
-  border: 3px solid #0044aa;
-  border-radius: 20px;
+
+/* 3D CUBE CONTAINER */
+.cube-container {
+  width: 100px;
+  height: 100px;
   position: relative;
-  overflow: hidden;
+  transform-style: preserve-3d;
+  animation: spin 6s linear infinite;
+  cursor: none;
+}
+
+/* 3D CUBE FACES */
+.cube-face {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  box-shadow: 0 0 15px #00ffff88;
+  opacity: 0.9;
+}
+
+/* Positioning each face */
+.cube-face.front  { transform: translateZ(50px); }
+.cube-face.back   { transform: rotateY(180deg) translateZ(50px); }
+.cube-face.right  { transform: rotateY(90deg) translateZ(50px); }
+.cube-face.left   { transform: rotateY(-90deg) translateZ(50px); }
+.cube-face.top    { transform: rotateX(90deg) translateZ(50px); }
+.cube-face.bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+/* Spin animation */
+@keyframes spin {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* SECTIONS */
+.section {
+  padding: 80px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.card {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 25px;
+  border-radius: 14px;
+  border: 2px solid #00ffff;
+  margin-bottom: 30px;
+  box-shadow: 0 0 15px #00ffff80;
+}
+
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.card a {
+  color: #00ffff;
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 40px;
+  opacity: 0.6;
+  font-size: 10px;
+}
+
+/* BOOT ANIMATION */
+#boot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  color: #00ffff;
+  font-family: "Press Start 2P", cursive;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  box-shadow: 0 0 10px #00bbff, 0 0 20px #00f;
-  text-decoration: none;
-  transition: all 0.2s;
+  z-index: 10000;
 }
-.menu-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 85, 0.6);
-  border-radius: 20px;
-  z-index: 1;
-  transition: background 0.2s;
+
+#boot p {
+  margin: 10px 0;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
 }
-.menu-item:hover .menu-overlay {
-  background: rgba(0, 0, 85, 0.3);
-}
-.menu-item span {
-  position: relative;
-  z-index: 2;
-  color: #00bbff;
-  font-size: 22px;
-  text-align: center;
-  text-shadow: 0 0 5px #00bbff, 0 0 10px #00f;
-}
-.menu-item:hover {
-  box-shadow: 0 0 20px #00bbff, 0 0 40px #00f;
-  transform: scale(1.05);
-}
-.mfooter {
-  font-size: 20px;
-  color: #ff66cc;
-  text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff99dd;
-  margin: 50px 0;
-}
-.nfooter {
-  font-size: 20px;
-  color: #00bbff;
-  text-shadow: 0 0 5px #00bbff, 0 0 10px #ff99dd;
-  margin: 50px 0;
+
+#boot p:nth-child(1) { animation-delay: 0.5s; }
+#boot p:nth-child(2) { animation-delay: 1.5s; }
+#boot p:nth-child(3) { animation-delay: 2.5s; }
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
