@@ -30,6 +30,11 @@
 <header id="home">
   <h1>Stormzady's Place</h1>
   <p>Bots · Tools · Experiments</p>
+  <div class="search-container">
+  <input type="text" id="search-box" placeholder="Search projects..." />
+  <button id="search-btn">Search</button>
+</div>
+
 
   <div class="cube-container" aria-label="Spinning 3D cube" role="img" tabindex="0">
     <div class="cube-face front"></div>
@@ -126,6 +131,29 @@ async function testSpeed() {
 
   speedText.textContent = mbps + " Mbps...";
 }
+const searchBox = document.getElementById("search-box");
+const searchBtn = document.getElementById("search-btn");
+const projects = document.querySelectorAll("#projects .card");
+
+function searchProjects() {
+  const query = searchBox.value.toLowerCase();
+
+  projects.forEach(card => {
+    const title = card.querySelector("h2").textContent.toLowerCase();
+    const desc = card.querySelector("p").textContent.toLowerCase();
+    
+    if (title.includes(query) || desc.includes(query)) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+
+searchBtn.addEventListener("click", searchProjects);
+
+// Optional: search as you type
+searchBox.addEventListener("input", searchProjects);
 
 window.addEventListener("load", () => {
   testSpeed(); // run speed test
