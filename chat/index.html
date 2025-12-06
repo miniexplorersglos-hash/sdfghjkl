@@ -1,182 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stormzy Chat - Material 3</title>
-
-  <!-- Material 3 Web Components (ESM imports) -->
-  <script type="module">
-    import 'https://unpkg.com/@material/mwc-button?module';
-    import 'https://unpkg.com/@material/mwc-textfield?module';
-  </script>
-
-  <style>
-    body {
-      font-family: "Roboto", sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-
-    #chatContainer {
-      max-width: 600px;
-      width: 100%;
-      margin-top: 50px;
-      background-color: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-    }
-
-    #messages {
-      flex: 1;
-      height: 400px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-      background-color: #fafafa;
-    }
-
-    .message {
-      margin-bottom: 8px;
-      padding: 8px 12px;
-      border-radius: 12px;
-      background-color: #e0e0e0;
-      max-width: 75%;
-      word-wrap: break-word;
-    }
-
-    .message.self {
-      background-color: #6200ee;
-      color: white;
-      margin-left: auto;
-    }
-
-    #inputContainer {
-      display: flex;
-      gap: 8px;
-    }
-
-    mwc-textfield {
-      flex: 1;
-    }
-
-    #currentUser {
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discord-style Firebase Chat</title>
+<style>
+  body { margin:0; font-family: 'Segoe UI', sans-serif; background:#2f3136; color:white; display:flex; height:100vh; }
+  #sidebar { width:220px; background:#202225; display:flex; flex-direction:column; }
+  #profile { padding:10px; display:flex; align-items:center; border-bottom:1px solid #444; }
+  #profile img { width:40px; height:40px; border-radius:50%; margin-right:10px; }
+  #profile div { flex:1; }
+  #chatList { flex:1; overflow-y:auto; }
+  .chatItem { padding:10px; cursor:pointer; border-radius:5px; margin:2px 5px; }
+  .chatItem:hover { background:#36393f; }
+  #main { flex:1; display:flex; flex-direction:column; }
+  #messages { flex:1; padding:10px; overflow-y:auto; background:#36393f; }
+  .message { display:flex; margin-bottom:10px; }
+  .message .avatar { width:35px; height:35px; border-radius:50%; margin-right:8px; }
+  .message .content { background:#4f545c; padding:6px 10px; border-radius:6px; max-width:70%; }
+  .message.self .content { background:#7289da; margin-left:auto; color:white; }
+  #messageInputContainer { display:flex; padding:10px; border-top:1px solid #444; background:#40444b; }
+  #messageInputContainer input { flex:1; padding:8px; border-radius:6px; border:none; background:#2f3136; color:white; }
+  #messageInputContainer button { margin-left:8px; padding:8px 12px; border-radius:6px; border:none; background:#7289da; color:white; cursor:pointer; }
+  #authContainer { margin:auto; display:flex; flex-direction:column; width:300px; }
+  #authContainer input, #authContainer button { margin-bottom:10px; padding:8px; border-radius:6px; border:none; }
+  #authContainer input { width:100%; }
+  #authContainer button { background:#7289da; color:white; cursor:pointer; }
+</style>
 </head>
 <body>
-  <div id="chatContainer">
-    <mwc-button id="loginBtn" label="Sign in with Google" raised></mwc-button>
-    <mwc-button id="logoutBtn" label="Sign Out" raised style="display:none;"></mwc-button>
 
-    <div id="currentUser"></div>
-    <div id="messages"></div>
-
-    <div id="inputContainer">
-      <mwc-textfield id="messageInput" label="Type a message" outlined></mwc-textfield>
-      <mwc-button label="Send" raised id="sendBtn"></mwc-button>
+<div id="sidebar">
+  <div id="profile">
+    <img id="avatarImg" src="https://i.pravatar.cc/40" alt="Avatar">
+    <div>
+      <div id="displayName">Guest</div>
+      <div id="status" style="font-size:12px;color:#b9bbbe;">offline</div>
     </div>
   </div>
+  <div id="chatList"></div>
+  <button id="newDMBtn" style="margin:5px;background:#7289da;">New DM</button>
+  <button id="newGroupBtn" style="margin:5px;background:#7289da;">New Group</button>
+  <button id="logoutBtn" style="margin:5px;background:#f04747;">Logout</button>
+</div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js"></script>
+<div id="main">
+  <div id="authContainer">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <input type="text" id="displayNameInput" placeholder="Display Name">
+    <button id="signupBtn">Sign Up</button>
+    <button id="loginBtn">Log In</button>
+    <div id="authMessage"></div>
+  </div>
+  <div id="messages" style="display:none;"></div>
+  <div id="messageInputContainer" style="display:none;">
+    <input type="text" id="messageInput" placeholder="Type a message">
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
 
-  <script>
-    // ===== Your Firebase Config =====
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyDH1YivNviB5RyoScjVf23NfNx5DVTVk",
-      authDomain: "stormzychat-1128c.firebaseapp.com",
-      projectId: "stormzychat-1128c",
-      storageBucket: "stormzychat-1128c.firebasestorage.app",
-      messagingSenderId: "295972265692",
-      appId: "1:295972265692:web:21d8eb8228d8ffa244de19",
-      measurementId: "G-J2RZF01WB7"
-    };
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js"></script>
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
-    const messagesRef = db.ref('messages');
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDyDH1YivNviB5RyoScjVf23NfNx5DVTVk",
+  authDomain: "stormzychat-1128c.firebaseapp.com",
+  projectId: "stormzychat-1128c",
+  storageBucket: "stormzychat-1128c.firebasestorage.app",
+  messagingSenderId: "295972265692",
+  appId: "1:295972265692:web:21d8eb8228d8ffa244de19",
+  measurementId: "G-J2RZF01WB7"
+};
 
-    // Elements
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const currentUserDiv = document.getElementById('currentUser');
-    const messagesDiv = document.getElementById('messages');
-    const messageInput = document.getElementById('messageInput');
-    const sendBtn = document.getElementById('sendBtn');
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-    // ===== Authentication =====
-    loginBtn.addEventListener('click', () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider);
+let currentUser = null;
+let currentChatId = null;
+
+// Elements
+const avatarImg = document.getElementById('avatarImg');
+const displayNameEl = document.getElementById('displayName');
+const statusEl = document.getElementById('status');
+const chatListDiv = document.getElementById('chatList');
+const messagesDiv = document.getElementById('messages');
+const messageInputContainer = document.getElementById('messageInputContainer');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+
+const authContainer = document.getElementById('authContainer');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const displayNameInput = document.getElementById('displayNameInput');
+const signupBtn = document.getElementById('signupBtn');
+const loginBtn = document.getElementById('loginBtn');
+const authMessage = document.getElementById('authMessage');
+
+const logoutBtn = document.getElementById('logoutBtn');
+const newDMBtn = document.getElementById('newDMBtn');
+const newGroupBtn = document.getElementById('newGroupBtn');
+
+// ===== Auth =====
+signupBtn.onclick = ()=>{
+  const email=emailInput.value.trim();
+  const password=passwordInput.value.trim();
+  const displayName = displayNameInput.value.trim()||'Anonymous';
+  auth.createUserWithEmailAndPassword(email,password)
+    .then(userCredential=>{
+      currentUser = userCredential.user;
+      db.ref('users/'+currentUser.uid).set({
+        displayName,
+        avatar:'https://i.pravatar.cc/40',
+        status:'online'
+      });
+      setupUI();
+    }).catch(err=>authMessage.innerText=err.message);
+};
+
+loginBtn.onclick = ()=>{
+  const email=emailInput.value.trim();
+  const password=passwordInput.value.trim();
+  auth.signInWithEmailAndPassword(email,password)
+    .then(userCredential=>{
+      currentUser = userCredential.user;
+      db.ref('users/'+currentUser.uid+'/status').set('online');
+      setupUI();
+    }).catch(err=>authMessage.innerText=err.message);
+};
+
+logoutBtn.onclick = ()=>{
+  db.ref('users/'+currentUser.uid+'/status').set('offline');
+  auth.signOut();
+};
+
+auth.onAuthStateChanged(user=>{
+  currentUser = user;
+  if(user) setupUI();
+  else {
+    authContainer.style.display='flex';
+    messagesDiv.style.display='none';
+    messageInputContainer.style.display='none';
+  }
+});
+
+// ===== Setup UI =====
+function setupUI(){
+  authContainer.style.display='none';
+  messagesDiv.style.display='block';
+  messageInputContainer.style.display='flex';
+  logoutBtn.style.display='block';
+  loadProfile();
+  loadChats();
+}
+
+// ===== Profile =====
+function loadProfile(){
+  db.ref('users/'+currentUser.uid).on('value',snap=>{
+    const user = snap.val();
+    avatarImg.src = user.avatar||'https://i.pravatar.cc/40';
+    displayNameEl.innerText = user.displayName||'Anonymous';
+    statusEl.innerText = user.status||'online';
+  });
+}
+
+// ===== Chats =====
+function loadChats(){
+  chatListDiv.innerHTML='';
+  db.ref('chats').orderByChild('members/'+currentUser.uid).equalTo(true)
+    .on('value',snap=>{
+      chatListDiv.innerHTML='';
+      snap.forEach(chatSnap=>{
+        const chat=chatSnap.val();
+        const chatId = chatSnap.key;
+        let chatName = chat.type==='dm'?getOtherMemberName(chat.members):chat.name;
+        const div = document.createElement('div');
+        div.className='chatItem';
+        div.innerText=chatName;
+        div.onclick = ()=>openChat(chatId,chatName);
+        chatListDiv.appendChild(div);
+      });
     });
+}
 
-    logoutBtn.addEventListener('click', () => auth.signOut());
-
-    auth.onAuthStateChanged(user => {
-      if(user){
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline';
-        currentUserDiv.innerText = `Logged in as: ${user.displayName}`;
-      } else {
-        loginBtn.style.display = 'inline';
-        logoutBtn.style.display = 'none';
-        currentUserDiv.innerText = '';
-      }
-    });
-
-    // ===== Realtime Messages =====
-    messagesRef.on('child_added', snapshot => {
-      const msg = snapshot.val();
-      const msgElement = document.createElement('div');
-      msgElement.classList.add('message');
-      if(auth.currentUser && msg.user === auth.currentUser.displayName){
-        msgElement.classList.add('self');
-      }
-      msgElement.innerHTML = `<strong>${msg.user}:</strong> ${msg.text}`;
-      messagesDiv.appendChild(msgElement);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
-
-    // ===== Send Messages =====
-    function sendMessage(){
-      const text = messageInput.value.trim();
-      const user = auth.currentUser;
-      if(!user){
-        alert("Please sign in first!");
-        return;
-      }
-      if(text){
-        messagesRef.push({
-          user: user.displayName,
-          text: text,
-          timestamp: Date.now()
-        });
-        messageInput.value = '';
-      }
+function getOtherMemberName(members){
+  for(const uid in members){
+    if(uid!==currentUser.uid){
+      return uid; // Later fetch displayName from /users/uid
     }
+  }
+  return 'Unknown';
+}
 
-    sendBtn.addEventListener('click', sendMessage);
+// ===== Open Chat =====
+function openChat(chatId,chatName){
+  currentChatId=chatId;
+  messagesDiv.innerHTML='';
+  const chatRef = db.ref('chats/'+chatId+'/messages');
+  chatRef.off();
+  chatRef.on('child_added',snapshot=>{
+    const msg = snapshot.val();
+    const div = document.createElement('div');
+    div.className='message';
+    const content = document.createElement('div');
+    content.className='content';
+    content.innerText=msg.text;
 
-    messageInput.addEventListener('keypress', (e) => {
-      if(e.key === 'Enter') sendMessage();
+    if(msg.sender===currentUser.uid) div.classList.add('self');
+
+    const avatar = document.createElement('img');
+    avatar.className='avatar';
+    db.ref('users/'+msg.sender+'/avatar').once('value').then(snap=>{
+      avatar.src = snap.val()||'https://i.pravatar.cc/40';
     });
-  </script>
+
+    div.appendChild(avatar);
+    div.appendChild(content);
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop=messagesDiv.scrollHeight;
+  });
+}
+
+// ===== Send Message =====
+sendBtn.onclick = ()=>{
+  const text=messageInput.value.trim();
+  if(!text || !currentChatId) return;
+  const msgRef=db.ref('chats/'+currentChatId+'/messages').push();
+  msgRef.set({
+    sender:currentUser.uid,
+    text,
+    timestamp:Date.now()
+  });
+  messageInput.value='';
+};
+
+messageInput.addEventListener('keypress',e=>{
+  if(e.key==='Enter') sendBtn.click();
+});
+
+// ===== New DM / Group =====
+newDMBtn.onclick = ()=>{
+  const otherUID=prompt('Enter UID for DM:');
+  if(!otherUID) return;
+  const chatRef=db.ref('chats').push();
+  chatRef.set({
+    type:'dm',
+    members:{[currentUser.uid]:true,[otherUID]:true}
+  });
+};
+
+newGroupBtn.onclick = ()=>{
+  const groupName=prompt('Enter group name:');
+  const memberUIDs = prompt('Enter member UIDs (comma separated)').split(',').map(u=>u.trim());
+  if(!groupName || memberUIDs.length===0) return;
+  const membersObj={[currentUser.uid]:true};
+  memberUIDs.forEach(uid=>membersObj[uid]=true);
+  const chatRef=db.ref('chats').push();
+  chatRef.set({
+    type:'group',
+    name:groupName,
+    members:membersObj
+  });
+};
+</script>
 </body>
 </html>
