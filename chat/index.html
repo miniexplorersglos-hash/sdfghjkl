@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stormzy Chat - Material 3</title>
-  <!-- Material 3 Web Components -->
-  <script type="module" src="https://unpkg.com/@material/web@latest/dist/mdc.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/@material/web@latest/dist/mdc.css">
+
+  <!-- Material 3 Web Components (ESM imports) -->
+  <script type="module">
+    import 'https://unpkg.com/@material/mwc-button?module';
+    import 'https://unpkg.com/@material/mwc-textfield?module';
+  </script>
 
   <style>
     body {
@@ -67,9 +70,9 @@
       flex: 1;
     }
 
-    #loginBtn, #logoutBtn {
+    #currentUser {
       margin-bottom: 12px;
-      align-self: flex-start;
+      font-weight: 500;
     }
   </style>
 </head>
